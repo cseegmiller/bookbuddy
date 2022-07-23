@@ -1,66 +1,62 @@
 <?php 
-session_start();
-require "C:\\\\xampp\htdocs\Capstone\connection.php";
+    session_start();
+    require "C:\\\\xampp\htdocs\Capstone\bookbuddy\connection.php";
 
-$email = "";
-$name = "";
-$studentID = "";
-$classCode= "";
-$startPage= "";
-$dateSubmit = date("d-m-Y");
-$endPage="";
-$totalPage="";
-$minutes="";
-$errors = array();
+    $email = "";
+    $name = "";
+    $studentID = "";
+    $classCode= "";
+    $errors = array();
 
-//if user signup button
-if(isset($_POST['signup'])){
-    $classCode = mysqli_real_escape_string($con, $_POST['classCode']);
-    $name = mysqli_real_escape_string($con, $_POST['name']);
-    $studentID = mysqli_real_escape_string($con, $_POST['studentID']);
-    $email = mysqli_real_escape_string($con, $_POST['email']);
-    $password = mysqli_real_escape_string($con, $_POST['password']);
-    $cpassword = mysqli_real_escape_string($con, $_POST['cpassword']);
-    if($password !== $cpassword){
-        $errors['password'] = "Confirm password not matched!";
-    }
-    $email_check = "SELECT * FROM studentTable WHERE email = '$email'";
-    $res = mysqli_query($con, $email_check);
-    if(mysqli_num_rows($res) > 0){
-        $errors['email'] = "The email you have entered already exists!";
-    }
-    $classCode_check = "SELECT * FROM teacherTable WHERE classCode != '$classCode'";
-    $res = mysqli_query($con, $classCode_check);
-    if(mysqli_num_rows($res) > 0){
-        $errors['classCode'] = "The class code you entered does not exist!";
-    }
-    if(count($errors) === 0){
-        $encpass = password_hash($password, PASSWORD_BCRYPT);
-        $code = rand(999999, 111111);
-        $status = "notverified";
-        $insert_data = "INSERT INTO studentTable (classCode, name, studentID, email, password, code, status)
-                        values('$classCode', '$name', '$studentID', '$email', '$encpass', '$code', '$status')";
-        $data_check = mysqli_query($con, $insert_data);
-        if($data_check){
-            $subject = "Email Verification Code";
-            $message = "Your verification code is $code";
-            $sender = "From: caroline.seegmiller@gmail.com";
-            if(mail($email, $subject, $message, $sender)){
-                $info = "We've sent a verification code to your parent's email - $email";
-                $_SESSION['info'] = $info;
-                $_SESSION['email'] = $email;
-                $_SESSION['password'] = $password;
-                header('location: user-otp.php');
-                exit();
-            }else{
-                $errors['otp-error'] = "Failed while sending code!";
-            }
-        }else{
-            $errors['db-error'] = "Failed while inserting data into database!";
+    //if user signup button
+    if(isset($_POST['signup'])){
+        $classCode = mysqli_real_escape_string($con, $_POST['classCode']);
+        $name = mysqli_real_escape_string($con, $_POST['name']);
+        $studentID = mysqli_real_escape_string($con, $_POST['studentID']);
+        $email = mysqli_real_escape_string($con, $_POST['email']);
+        $password = mysqli_real_escape_string($con, $_POST['password']);
+        $cpassword = mysqli_real_escape_string($con, $_POST['cpassword']);
+        if($password !== $cpassword){
+            $errors['password'] = "Confirm password not matched!";
         }
+        $email_check = "SELECT * FROM studentTable WHERE email = '$email'";
+        $res = mysqli_query($con, $email_check);
+        if(mysqli_num_rows($res) > 0){
+            $errors['email'] = "The email you have entered already exists!";
+        }
+        $classCode_check = "SELECT * FROM teacherTable WHERE classCode != '$classCode'";
+        $res = mysqli_query($con, $classCode_check);
+        if(mysqli_num_rows($res) > 0){
+            $errors['classCode'] = "The class code you entered does not exist!";
+        }
+        if(count($errors) === 0){
+            $encpass = password_hash($password, PASSWORD_BCRYPT);
+            $code = rand(999999, 111111);
+            $status = "notverified";
+            $insert_data = "INSERT INTO studentTable (classCode, name, studentID, email, password, code, status)
+                            values('$classCode', '$name', '$studentID', '$email', '$encpass', '$code', '$status')";
+            $data_check = mysqli_query($con, $insert_data);
+            if($data_check){
+                $subject = "Email Verification Code";
+                $message = "Your verification code is $code";
+                $sender = "From: caroline.seegmiller@gmail.com";
+                if(mail($email, $subject, $message, $sender)){
+                    $info = "We've sent a verification code to your parent's email - $email";
+                    $_SESSION['info'] = $info;
+                    $_SESSION['email'] = $email;
+                    $_SESSION['password'] = $password;
+                    header('location: user-otp.php');
+                    exit();
+                }else{
+                    $errors['otp-error'] = "Failed while sending code!";
+                }
+            }else{
+                $errors['db-error'] = "Failed while inserting data into database!";
+            }
+        }
+
     }
 
-}
     //if user click verification code submit button
     if(isset($_POST['check'])){
         $_SESSION['info'] = "";
@@ -195,22 +191,20 @@ if(isset($_POST['signup'])){
     }
     
     // if startTime button click
-    if(isset($_POST['startTime'])){
+    if(isset($_POST['stopTime'])){
         $_SESSION['info'] = "";
         $studentID = $_SESSION['studentID']; //getting this studentID using session
-        $name = "SELECT name FROM studentTable WHERE studentID = '$studentID'";
-
-        $dateSubmit = mysqli_real_escape_string($con, $_POST['dateSubmit']);
-        $startPage = mysqli_real_escape_string($con, $_POST['startPage']);
-        $endPage = mysqli_real_escape_string($con, $_POST['endPage']);
-        $minutes = mysqli_real_escape_string($con, $_POST['minutes']);
-
-        $insert_read_data = "INSERT INTO readingtable (studentID, name, dateSubmit, startPage, endPage, totalPage, minutes)
-                values('$studentID', '$name', '$dateSubmit', '$startPage', '$endPage','$totalPage','$minutes')";
-        $run_new_query = mysqli_query($con, $insert_read_data);
-    
+        $name_getter = "SELECT name FROM studentTable WHERE studentID = $studentID"; // get name from student table
+        $holder = mysqli_query($con, $name_getter); 
+        if(mysqli_num_rows($holder) > 0){
+            $fetch_data = mysqli_fetch_assoc($holder);
+            $name = $fetch_data['name'];
+        }
+        $dateSubmit = date('Y-m-d'); //get date from user
         
-    
+        $insert_read_data = "INSERT INTO readingTable (studentID, name, dateSubmit, startPage, endPage, totalPage, minutes)
+                VALUES ('$studentID', '$name', '$dateSubmit', '$startPage', '$endPage', ' $totalPage', '$minutes')";
+            $run_query = mysqli_query($con, $insert_read_data);
     }
-    
+
 ?>

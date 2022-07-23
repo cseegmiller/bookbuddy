@@ -9,46 +9,45 @@
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
-SET time_zone = "+00:00";
+SET time_zone = "-05:00";
+DROP TABLE IF EXISTS studentTable, teacherTable, gradebookTable, readingTable;
 
-
-CREATE TABLE `studentTable` (
-  `classCode` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `studentID` int NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `code` mediumint(50) NOT NULL,
-  `status` text NOT NULL,
+CREATE TABLE studentTable (
+  classCode varchar(255) NOT NULL,
+  name varchar(255) NOT NULL,
+  studentID int NOT NULL,
+  email varchar(255) NOT NULL,
+  password varchar(255) NOT NULL,
+  code mediumint(50) NOT NULL,
+  status text NOT NULL,
   PRIMARY KEY (studentID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `teacherTable` (
-  `classCode` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `code` mediumint(50) NOT NULL,
-  `status` text NOT NULL,
+CREATE TABLE teacherTable (
+  classCode varchar(255) NOT NULL,
+  name varchar(255) NOT NULL,
+  email varchar(255) NOT NULL,
+  password varchar(255) NOT NULL,
+  code mediumint(50) NOT NULL,
+  status text NOT NULL,
   PRIMARY KEY (classCode)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `gradebookTable` (
-  `studentID` int NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `task` varchar(255),
-  `dateSubmit` DATETIME,
-  `grade` int,
+CREATE TABLE gradebookTable (
+  studentID int NOT NULL,
+  name varchar(255) NOT NULL,
+  task varchar(255),
+  dateSubmit DATETIME,
+  grade varchar(255),
   PRIMARY KEY (studentID)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE `readingTable` (
-  `studentID` int NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `dateSubmit` DATETIME,
-  `startPage` int,
-  `endPage` int,
-  `totalPage` int,
-  `minutes` int,
-  PRIMARY KEY (studentID)
+CREATE TABLE readingTable (
+  studentID int NOT NULL,
+  name varchar(255) NOT NULL,
+  dateSubmit DATETIME,
+  startPage varchar(255),
+  endPage varchar(255),
+  totalPage varchar(255),
+  minutes varchar(255),
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -64,48 +64,52 @@
               var minutes = 00; 
               var hours = 00; 
             
-              var appendHours = document.getElementById("minutes")
-              var appendMinutes = document.getElementById("minutes")
-              var appendSeconds = document.getElementById("seconds")
-              var buttonStart = document.getElementById('start');
+              var appendHours = document.getElementById("hours");
+              var appendMinutes = document.getElementById("minutes");
+              var appendSeconds = document.getElementById("seconds");
+              var startButton = document.getElementById('startButton');
+              var startTime = document.getElementById('startTime');
               var buttonPause = document.getElementById('pause');
-              var buttonStop = document.getElementById('stop');
+              var stopButton = document.getElementById('stopButton');
+              var stopTime = document.getElementById('stopTime')
               var Interval ;
             
-              buttonStart.onclick = function() {  
-                clearInterval(Interval);
-                 Interval = setInterval(startTimer, 1000);
-                buttonStart.disabled=true;
+              startButton.onclick = function() {  
+                // startButton.disabled=true;
                 buttonPause.disabled=false;
-                buttonStop.disabled=false;
-                if (buttonStart.className == "btn btn-lg btn-primary"){
-                    buttonStart.className = "btn btn-lg btn-secondary";
+                stopButton.disabled=false;
+                if (startButton.className == "btn btn-lg btn-primary"){
+                  startButton.className = "btn btn-lg btn-secondary";
                 }
                 if (buttonPause.className == "btn btn-lg btn-secondary"){
                     buttonPause.className = "btn btn-lg btn-primary";
                 }
-                if (buttonStop.className == "btn btn-lg btn-secondary"){
-                    buttonStop.className = "btn btn-lg btn-primary";
+                if (stopButton.className == "btn btn-lg btn-secondary"){
+                    stopButton.className = "btn btn-lg btn-primary";
                 }
+              }
+              startTime.onclick = function(){
+                clearInterval(Interval);
+                Interval = setInterval(startTimer, 1000);
               }
               
               buttonPause.onclick = function() {
                 clearInterval(Interval);
-                buttonStart.disabled=false;
+                startButton.disabled=false;
                 buttonPause.disabled=true;
-                buttonStop.disabled=false;
-                if (buttonStart.className == "btn btn-lg btn-secondary"){
-                    buttonStart.className = "btn btn-lg btn-primary";
+                stopButton.disabled=false;
+                if (startButton.className == "btn btn-lg btn-secondary"){
+                  startButton.className = "btn btn-lg btn-primary";
                 }
                 if (buttonPause.className == "btn btn-lg btn-primary"){
                     buttonPause.className = "btn btn-lg btn-secondary";
                 }
-                if (buttonStop.className == "btn btn-lg btn-secondary"){
-                    buttonStop.className = "btn btn-lg btn-primary";
+                if (stopButton.className == "btn btn-lg btn-secondary"){
+                  stopButton.className = "btn btn-lg btn-primary";
                 }
               }
               
-              buttonStop.onclick = function() {
+              stopTime.onclick = function() {
                 clearInterval(Interval);
                 hours = "00";
                 minutes = "00";
@@ -113,17 +117,17 @@
                 appendHours.innerHTML = hours;
                 appendMinutes.innerHTML = minutes;
                 appendSeconds.innerHTML = seconds;
-                buttonStart.disabled=false;
+                startButton.disabled=false;
                 buttonPause.disabled=true;
-                buttonStop.disabled=true;
-                if (buttonStart.className == "btn btn-lg btn-secondary"){
-                    buttonStart.className = "btn btn-lg btn-primary";
+                stopButton.disabled=true;
+                if (startButton.className == "btn btn-lg btn-secondary"){
+                  startButton.className = "btn btn-lg btn-primary";
                 }
                 if (buttonPause.className == "btn btn-lg btn-primary"){
                     buttonPause.className = "btn btn-lg btn-secondary";
                 }
-                if (buttonStop.className == "btn btn-lg btn-primary"){
-                    buttonStop.className = "btn btn-lg btn-secondary";
+                if (stopButton.className == "btn btn-lg btn-primary"){
+                  stopButton.className = "btn btn-lg btn-secondary";
                 }
               }
               
@@ -155,65 +159,99 @@
             </script>
         <br>
         <div class="row justify-content-around">
-          <!-- <button id="start" type="button" class="btn btn-lg btn-primary">Start Time</button> -->
-          <button id="pause" type="button" class="btn btn-lg btn-secondary" disabled>Pause Time</button>
-          <button id="stop" type="button" class="btn btn-lg btn-secondary" disabled>Stop Time</button>
+          <!-- start Button trigger modal -->          
+          <button id="startButton" type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#staticBackdrop1">Start Time</button>
+          <!-- Modal -->
+            <div class="modal fade" id="staticBackdrop1" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+          
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Start Time</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  
+                  <div class="modal-body">  
+                    <form action="timer.php" method="POST" autocomplete="">
+          
+                      <div class="form-group">
+                        <label for="startPage" class="col-form-label">Starting page number:</label>
+                      </div>
+                      
+                      <div class = "form-group">
+                        <input class="form-control" type="text" name="startP" placeholder="Write page number here" required value="<?php echo $startPage?>">
+                      </div>
+                    
+                      <div class="form-group">
+                        <input id="startTime" class="form-control button" type="submit" name="startTime" value="Submit">
+                      </div>
+                    
+                    </form>
+                  </div>
+          
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  </div>
+          
+                </div>
+              </div>
+            </div>
+
+          <!-- pause -->
+            <button id="pause" type="button" class="btn btn-lg btn-secondary" disabled>Pause Time</button>
+          
+          <!-- Button trigger modal -->
+          <button id=stopButton type="button" class="btn btn-lg btn-secondary" disabled data-toggle="modal" data-target="#staticBackdrop">Stop Time</button>
+          <!-- Modal -->
+            <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+          
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Stop Time</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  
+                  <div class="modal-body">
+                    
+                    <form action="timer.php" method="POST" autocomplete="">
+          
+                      <div class="form-group">
+                        <label for="stopPage" class="col-form-label">Last page read:</label>
+                      </div>
+                
+                      <div class = "form-group">
+                        <input class="form-control" type="text" name="endPage" placeholder="Write page number here" required value="<?php echo $endPage ?>">
+                      </div>
+                      
+                      <div class="form-group">
+                        <input class="form-control button" type="submit" name="stopTime" value="Submit" >
+                      </div>
+                    
+                    </form>
+                  </div>
+          
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  </div>
+          
+                </div>
+              </div>
+            </div>
+
+
+
+
+
         </div>
         <hr class="my-4">    
       </div>
     </div>
         
-<!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop">Start Time</button>
-
-<!-- Modal -->
-  <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-
-        <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Start Time</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        
-        <div class="modal-body">
-          
-          <form action="timer.php" method="POST" autocomplete="">
-
-            <div class="form-group">
-              <label for="startPage" class="col-form-label">Starting page number:</label>
-            </div>
-            
-            <div class="form-group">
-                <input class="form-control" type="date" name="dateSubmit" placeholder="date" required value="<?php echo $dateSubmit ?>">
-            </div>
-            <div class = "form-group">
-              <input class="form-control" type="text" name="startPage" placeholder="Write page number here" required value="<?php echo $startPage ?>">
-            </div>
-            <div class = "form-group">
-              <input class="form-control" type="text" name="endPage" placeholder="Write page number here" required value="<?php echo $endPage ?>">
-            </div>
-            <div class = "form-group">
-              <input class="form-control" type="text" name="totalPage" placeholder="Write page number here" required value="<?php echo $totalPage ?>">
-            </div>
-            <div class = "form-group">
-              <input class="form-control" type="text" name="minutes" placeholder="Write page number here" required value="<?php echo $minutes ?>">
-            </div>
-            <div class="form-group">
-              <input class="form-control button" type="submit" name="startTime" value="Submit">
-            </div>
-          </form>
-        </div>
-
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-
-      </div>
-    </div>
-  </div>
 
 </body>
 </html>

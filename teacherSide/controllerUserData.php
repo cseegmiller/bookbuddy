@@ -1,6 +1,6 @@
 <?php 
 session_start();
-require "C:\\\\xampp\htdocs\Capstone\connection.php";
+require "C:\\\\xampp\htdocs\Capstone\bookbuddy\connection.php";
 
 $email = "";
 $name = "";
